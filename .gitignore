@@ -1,0 +1,156 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import javax.swing.*;
+
+public class AreaOfaPolygon {
+    public static Frame frame;
+    public static void main(String[] args)
+    {
+        EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                frame = new Frame();
+                frame.toFront();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //çàâåðøàåò ïðîãðàììó ïðè çàêðûòèå ôðåéìà
+                frame.setVisible(true); //ïîêàçûâàåò ôðåéì íà ýêðàí
+            }
+        });
+    }
+}
+
+class Frame extends JFrame
+{
+    public static final int DEFAULT_WIDTH = 400, DEFAULT_HEIGHT = 440;
+    public static int screenWidth, screenHeight,i,n;
+    public static final String Name = "Palygon";
+    public static JPanel panel;
+    public static int x,y,xk,yk,count,w,h;
+    public static final Position[] massp = new Position[100];
+    public Frame()
+    {
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        screenWidth = screenSize.width;
+        screenHeight = screenSize.height;
+
+        setLocation((screenWidth / 2)-DEFAULT_WIDTH/2, (screenHeight / 2)-DEFAULT_HEIGHT/2); //Èíèöèàëèçèðóåì ïîëîæåíèå ôðåéìà
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT); //èíèöèàëèçèðóåì ðàçìåðû ôðåéìà
+        setTitle(Name); //Èíèöèàëèçèðóåì èìÿ
+        setResizable(true); //Çàäàžì ìîæåò ëè ïîëüçîâàòåëü èçìåíÿòü ðàçìåðû ôðåéìà
+
+        panel = new JPanel();
+        panel.setFocusable(true);
+        add(panel);
+        JButton button1 = new JButton("Нарисовать Многоугольник");
+        button1.setAlignmentX(CENTER_ALIGNMENT);
+        panel.add(button1);
+        JButton button2 = new JButton("Вписанный многоугольник");
+        button2.setAlignmentY(RIGHT_ALIGNMENT);
+        panel.add(button2);
+        panel.setBackground(Color.green);
+        panel.addMouseListener(new MouseListener() {
+            public void mouseReleased(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+                Point location = MouseInfo.getPointerInfo().getLocation();
+                x = (int) location.getX() - AreaOfaPolygon.frame.getLocation().x;
+                y = (int) location.getY() - AreaOfaPolygon.frame.getLocation().y;
+                Panel.paintSquare(getGraphics());
+                massp[n] = new Position(x,y);
+                n++;
+                //  	for(Position e1 : massp)
+                //			System.out.println(e1.getpositionX() + " " + e1.getpoditionY());
+            }
+        });
+        button1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                for(i=0;i<n-1;i++)
+                {
+                    x = massp[i].getpositionX();
+                    y = massp[i].getpositionY();
+                    w = massp[i+1].getpositionX();
+                    h = massp[i+1].getpositionY();
+                    Panel.paintLine(getGraphics());
+                    xk += x;
+                    yk += y;
+                    count++;
+                }
+                xk =(xk + w)/(count+1);
+                yk =(yk + h)/(count+1);
+                x = xk;
+                y = yk;
+                Panel.paintSquare(getGraphics());
+                x = massp[n-1].getpositionX();
+                y = massp[n-1].getpositionY();
+                w = massp[0].getpositionX();
+                h = massp[0].getpositionY();
+                Panel.paintLine(getGraphics());
+            }
+        });
+        button2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                for(i=0;i<n-1;i++)
+                {
+                    x = (massp[i].getpositionX()+ xk)/2;
+                    y = (massp[i].getpositionY() + yk)/2;
+                    w = (massp[i+1].getpositionX() + xk)/2;
+                    h = (massp[i+1].getpositionY() + yk)/2;
+                    Panel.paintLine(getGraphics());
+                }
+                x = (massp[n-1].getpositionX() + xk)/2;
+                y = (massp[n-1].getpositionY() + yk)/2;
+                w = (massp[0].getpositionX() + xk)/2;
+                h = (massp[0].getpositionY() + yk)/2;
+                Panel.paintLine(getGraphics());
+            }
+        });
+    }
+}
+
+class Position
+{
+    private int positionX;
+    private int positionY;
+    public Position(int x, int y)
+    {
+        positionX = x;
+        positionY = y;
+    }
+
+    public int getpositionX()
+    {
+        return positionX;
+    }
+
+    public int getpositionY()
+    {
+        return positionY;
+    }
+}
+
+class Panel extends JPanel
+{
+    public static void paintSquare(Graphics g)
+    {
+        Graphics2D g2 = (Graphics2D) g; //Ñîçäàíèå îáúåêòà äâóõìåðíîé ãðàôèêè
+
+        Rectangle2D field = new Rectangle2D.Double(Frame.x, Frame.y, 10, 10);
+        g2.setPaint(Color.white);
+        g2.fill(field);
+    }
+    public static void paintLine(Graphics g)
+    {
+        g.drawLine(Frame.x,Frame.y,Frame.w, Frame.h);
+    }
+}
