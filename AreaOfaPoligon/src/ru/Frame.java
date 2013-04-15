@@ -1,9 +1,5 @@
 package ru;
 
-import com.sun.org.apache.bcel.internal.generic.DUP_X1;
-import sun.awt.X11.XAWTIcon32_security_icon_yellow16_png;
-import sun.security.pkcs11.wrapper.CK_X9_42_DH1_DERIVE_PARAMS;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,11 +7,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+//import sun.awt.X11.XAWTIcon32_security_icon_yellow16_png;
+
 class Frame extends JFrame
 {
     public static final int DEFAULT_WIDTH = 400, DEFAULT_HEIGHT = 440;
     public static int screenWidth, screenHeight,i,n;
-    public static final String Name = "Palygon";
+    public static final String Name = "Polygon";
     public static JPanel panel;
     public static int Ax, Ay,xk,yk,count, Bx, By, Cx, Cy, Dx, Dy;
     public static final Position[] massp = new Position[100];
@@ -26,21 +24,18 @@ class Frame extends JFrame
         screenWidth = screenSize.width;
         screenHeight = screenSize.height;
 
-        setLocation((screenWidth / 2)-DEFAULT_WIDTH/2, (screenHeight / 2)-DEFAULT_HEIGHT/2); //?????????????? ????????? ??????
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT); //?????????????? ??????? ??????
-        setTitle(Name); //?????????????? ???
-        setResizable(true); //?????? ????? ?? ???????????? ???????? ??????? ??????
+        setLocation((screenWidth / 2)-DEFAULT_WIDTH/2, (screenHeight / 2)-DEFAULT_HEIGHT/2);
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        setTitle(Name);
+        setResizable(true);
 
         panel = new JPanel();
         panel.setFocusable(true);
         add(panel);
-        JButton button1 = new JButton("Нарисовать Многоугольник");
+        JButton button1 = new JButton("Button 1");
         button1.setAlignmentX(CENTER_ALIGNMENT);
         panel.add(button1);
-        JButton button2 = new JButton("Вписанный многоугольник");
-        button2.setAlignmentY(RIGHT_ALIGNMENT);
-        panel.add(button2);
-        panel.setBackground(Color.green);
+        panel.setBackground(Color.LIGHT_GRAY);
         panel.addMouseListener(new MouseListener() {
             public void mouseReleased(MouseEvent e) {}
             public void mouseExited(MouseEvent e) {}
@@ -78,7 +73,9 @@ class Frame extends JFrame
                     Position position1 = CreateLine.intersection(Ax, Ay, Bx, By, Cx, Cy);
                     Position position2 = CreateLine.intersection(Bx, By, Cx, Cy, Dx, Dy);
                     massp[i]=position1;
-                    Panel.paintLine(getGraphics(), position1.getPositionAx(), position1.getPositionAy(), position2.getPositionAx(), position2.getPositionAy());
+                    Panel.paintLine(getGraphics(), position1.getPositionAx(),
+                            position1.getPositionAy(), position2.getPositionAx(),
+                            position2.getPositionAy());
                     if(i == n-1) {
                         massp[n]=massp[0];
                         massp[n+1]=massp[1];
