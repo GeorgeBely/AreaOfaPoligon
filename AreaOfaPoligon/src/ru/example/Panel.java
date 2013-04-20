@@ -1,4 +1,4 @@
-package ru;
+package ru.example;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ class Panel extends JPanel
     {
         Graphics2D g2 = (Graphics2D) g;
 
-        Rectangle2D field = new Rectangle2D.Double(Frame.Ax, Frame.Ay, 10, 10);
+        Rectangle2D field = new Rectangle2D.Double(ru.example.Frame.Ax, ru.example.Frame.Ay, 3, 3);
         g2.setPaint(Color.white);
         g2.fill(field);
     }
