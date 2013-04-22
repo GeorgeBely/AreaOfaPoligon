@@ -1,4 +1,4 @@
-package ru;
+package ru.example;
 
 import java.awt.*;
 import javax.swing.*;
