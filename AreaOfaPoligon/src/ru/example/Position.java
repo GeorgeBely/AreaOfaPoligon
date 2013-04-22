@@ -1,4 +1,4 @@
-package ru;
+package ru.example;
 
 public class Position {
     private int positionAx;
@@ -16,19 +16,19 @@ public class Position {
     public Position() {
     }
 
-    public int getPositionAx() {
+    public int getAx() {
         return positionAx;
     }
 
-    public void setPositionAx(int positionAx) {
+    public void setAx(int positionAx) {
         this.positionAx = positionAx;
     }
 
-    public int getPositionAy() {
+    public int getAy() {
         return positionAy;
     }
 
-    public void setPositionAy(int positionAy) {
+    public void setAy(int positionAy) {
         this.positionAy = positionAy;
     }
 
