@@ -11,7 +11,7 @@ import java.awt.event.MouseListener;
 
 class Frame extends JFrame {
     public static final int DEFAULT_WIDTH = 400, DEFAULT_HEIGHT = 440;
-    public static final int DISTANCE_OF_VIEW = 2;
+    public static final int DISTANCE_OF_VIEW = 5;
     public static int screenWidth, screenHeight, i, n;
     public static final String NAME = "Polygon";
     public static JPanel panel;
