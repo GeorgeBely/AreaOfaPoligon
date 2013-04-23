@@ -1,36 +1,41 @@
 package ru.example;
 
 public class Position {
-    private int positionAx;
-    private int positionAy;
+    private int x;
+    private int y;
 
-    public Position(int Ax, int Ay ) {
-        positionAx = Ax;
-        positionAy = Ay;
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
-    public Position(int Ax, int Ay, int Bx, int By) {
-        positionAx = Ax;
-        positionAy = Ay;
+
+    public Position(int x, int y, int Bx, int By) {
+        this.x = x;
+        this.y = y;
     }
 
     public Position() {
     }
 
-    public int getAx() {
-        return positionAx;
+    @Override
+    public String toString() {
+        return "x: " + x + " y: " + y;
     }
 
-    public void setAx(int positionAx) {
-        this.positionAx = positionAx;
+    public int getX() {
+        return x;
     }
 
-    public int getAy() {
-        return positionAy;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public void setAy(int positionAy) {
-        this.positionAy = positionAy;
+    public int getY() {
+        return y;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
 }
 
