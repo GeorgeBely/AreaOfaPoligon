@@ -19,7 +19,7 @@ public class CommonHelper {
                     mergePoints(frame);
                 }
             }
-            System.out.println(positions[i]);
+         //   System.out.println(positions[i]);
         }
     }
 
