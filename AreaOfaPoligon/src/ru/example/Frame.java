@@ -11,11 +11,12 @@ import java.awt.event.MouseListener;
 
 class Frame extends JFrame {
     public static final int DEFAULT_WIDTH = 400, DEFAULT_HEIGHT = 440;
+    public static final int DISTANCE_OF_VIEW = 5;
     public static int screenWidth, screenHeight, i, n;
     public static final String NAME = "Polygon";
     public static JPanel panel;
     public static int Ax, Ay, xk, yk, count, Bx, By, Cx, Cy, Dx, Dy;
-    public static final Position[] massp = new Position[100];
+    public static Position[] massp = new Position[100];
 
     public Frame() {
         Toolkit kit = Toolkit.getDefaultToolkit();
@@ -63,23 +64,24 @@ class Frame extends JFrame {
         });
         buttonDrawPath.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                CommonHelper.mergePoints(Frame.this);
                 massp[n] = massp[0];
                 massp[n + 1] = massp[1];
                 massp[n + 2] = massp[2];
                 for (i = 0; i < n; i++) {
-                    Ax = massp[i].getAx();
-                    Ay = massp[i].getAy();
-                    Bx = massp[i + 1].getAx();
-                    By = massp[i + 1].getAy();
-                    Cx = massp[i + 2].getAx();
-                    Cy = massp[i + 2].getAy();
-                    Dx = massp[i + 3].getAx();
-                    Dy = massp[i + 3].getAy();
+                    Ax = massp[i].getX();
+                    Ay = massp[i].getY();
+                    Bx = massp[i + 1].getX();
+                    By = massp[i + 1].getY();
+                    Cx = massp[i + 2].getX();
+                    Cy = massp[i + 2].getY();
+                    Dx = massp[i + 3].getX();
+                    Dy = massp[i + 3].getY();
                     Panel.paintLine(getGraphics(), Ax, Ay, Bx, By);
-                    Position position1 = CreateLine.intersection(Ax, Ay, Bx, By, Cx, Cy);
-                    Position position2 = CreateLine.intersection(Bx, By, Cx, Cy, Dx, Dy);
+                    Position position1 = DrawHelper.intersection(Ax, Ay, Bx, By, Cx, Cy, DISTANCE_OF_VIEW);
+                    Position position2 = DrawHelper.intersection(Bx, By, Cx, Cy, Dx, Dy, DISTANCE_OF_VIEW);
                     massp[i] = position1;
-                    Panel.paintLine(getGraphics(), position1.getAx(), position1.getAy(), position2.getAx(), position2.getAy());
+                    Panel.paintLine(getGraphics(), position1.getX(), position1.getY(), position2.getX(), position2.getY());
                     if (i == n - 1) {
                         massp[n] = massp[0];
                         massp[n + 1] = massp[1];
