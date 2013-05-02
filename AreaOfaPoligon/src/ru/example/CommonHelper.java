@@ -8,7 +8,7 @@ public class CommonHelper {
     public static void mergePoints(Frame frame) {
         CommonHelper.frame = frame;
 
-        positions = frame.massp;
+        positions = frame.positions;
         n = frame.n;
         for (int i = 0; i < n; i++) {
             if (i != 0 || true) {
