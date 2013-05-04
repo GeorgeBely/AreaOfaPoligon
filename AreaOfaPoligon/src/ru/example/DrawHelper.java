@@ -194,7 +194,7 @@ public class DrawHelper {
                 //ignore
                 e.printStackTrace();
             }
-            System.out.println("totalDistance " + totalDistance);
+          //  System.out.println("totalDistance " + totalDistance);
         }
         return totalDistance;
     }

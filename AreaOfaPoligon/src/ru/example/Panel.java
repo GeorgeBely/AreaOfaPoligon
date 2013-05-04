@@ -80,7 +80,7 @@ class Panel extends JPanel {
               //  continue;
                 //TODO нужно реализовать корректное вычисление длины всех линий, с учетом того что n меняется
             }
-            System.out.println("currentLength " + currentLength);
+           // System.out.println("currentLength " + currentLength);
             for (int i = 0; i < posArray.length; i++) {
                 Position pos = posArray[i];
                 if (pos != null) {
