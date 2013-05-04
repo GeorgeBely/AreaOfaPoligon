@@ -96,7 +96,7 @@ class Frame extends JFrame {
                     //                    count++;
                 }
                 allPositions.add(positions.clone());
-                panel.drawTerrain(getGraphics(), allPositions);
+                panel.drawTerrain(getGraphics(), allPositions, n);
         /*        for (Position[] posArray : allPositions) {
                     for (Position pos : posArray) {
                         if (pos != null) {

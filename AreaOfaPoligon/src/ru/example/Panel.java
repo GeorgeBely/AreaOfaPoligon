@@ -26,6 +26,8 @@ class Panel extends JPanel {
 
     private Position[] beachLine;
     private List<Position[]> allPositions;
+    private int beachLineN = 0;
+    private int n;
 
     public static void paintSquare(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -41,7 +43,7 @@ class Panel extends JPanel {
     }
 
     private void paintLine(Graphics g, Position pos1, Position pos2) {
-          Panel.paintLine(g, pos1.getX(), pos1.getY(), pos2.getX(), pos2.getY());
+        Panel.paintLine(g, pos1.getX(), pos1.getY(), pos2.getX(), pos2.getY());
     }
 
     public static void drawDot(Graphics graphics, Position pos) {
@@ -59,23 +61,31 @@ class Panel extends JPanel {
         if (beachLine == null) {
             return;
         }
-        for (int x=0; x < 20; x++) {
-            for (int y=0; y < 20; y++)    {
-                g.drawImage(grass, x*36, y*36, null);
-            }
-        }
-        for (Position pos : beachLine) {
+        DrawHelper.drawGrass(g);
+      /*  for (Position pos : beachLine) {
             if (pos != null) {
                 g.drawImage(water, pos.getX(), pos.getY(), null);
             }
-        }
+        }*/
 
+        DrawHelper.drawWater(g, beachLine, beachLineN);
+        double previousLength = -1;
         for (Position[] posArray : allPositions) {
-            for (int i= 0; i< posArray.length; i++) {
+            double currentLength = DrawHelper.getTotalLinesLength(posArray, n);
+            if (previousLength == -1) {
+                previousLength = currentLength;
+            } else if (previousLength > currentLength)  {
+                previousLength = currentLength;
+            }   else if (previousLength < currentLength){
+              //  continue;
+                //TODO нужно реализовать корректное вычисление длины всех линий, с учетом того что n меняется
+            }
+            System.out.println("currentLength " + currentLength);
+            for (int i = 0; i < posArray.length; i++) {
                 Position pos = posArray[i];
                 if (pos != null) {
                     if (i != 0) {
-                        paintLine(g, pos, posArray[i-1]);
+                        paintLine(g, pos, posArray[i - 1]);
                     }
                     Panel.drawDot(g, pos);
                 }
@@ -83,10 +93,15 @@ class Panel extends JPanel {
         }
     }
 
-    public void drawTerrain(Graphics g, List<Position[]> positions) {
-        paintComponent(g);
+
+    public void drawTerrain(Graphics g, List<Position[]> positions, int n) {
+        if (beachLineN == 0) {
+            this.beachLineN = n;
+        }
+        this.n = n;
         this.beachLine = positions.get(0);
         this.allPositions = positions;
+        paintComponent(g);
         // JLabel waterTile = new JLabel(new ImageIcon(water));
         //  this.add(waterTile);
         //waterTile.setAlignmentX(CENTER_ALIGNMENT);
