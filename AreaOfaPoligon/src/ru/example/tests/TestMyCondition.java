@@ -1,16 +1,8 @@
 package ru.example.tests;
 
-import ru.example.DrawHelper;
 import ru.example.Position;
 import ru.example.common.MyCondition;
 
-/**
- * Created with IntelliJ IDEA.
- * User: krld
- * Date: 04.05.13
- * Time: 15:31
- * To change this template use File | Settings | File Templates.
- */
 public class TestMyCondition {
     public static void main(String[] args) {
         MyCondition condition;

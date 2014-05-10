@@ -6,109 +6,145 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.*;
-import java.util.List;
-
-//import sun.awt.X11.XAWTIcon32_security_icon_yellow16_png;
+import java.util.ArrayList;
 
 class Frame extends JFrame {
-    public static final int DEFAULT_WIDTH = 400, DEFAULT_HEIGHT = 440;
-    public static final int DISTANCE_OF_VIEW = 5;
-    public static int screenWidth, screenHeight, i, n;
+    public static final int DEFAULT_WIDTH = 1000, DEFAULT_HEIGHT = 600;
+    public static final int DISTANCE_OF_VIEW = 40;
+    public static int distance = 10;
     public static final String NAME = "Polygon";
-    public static Panel panel;
-    public static int Ax, Ay, xk, yk, count, Bx, By, Cx, Cy, Dx, Dy;
-    public static Position[] positions = new Position[100];
-    private List<Position[]> allPositions = new ArrayList<Position[]>();
+    private int countPolygon = 0;
+
+    public ArrayList<Polygon> polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
+    public boolean centerCheck = true;
+
 
     public Frame() {
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
-        screenWidth = screenSize.width;
-        screenHeight = screenSize.height;
 
-        setLocation((screenWidth / 2) - DEFAULT_WIDTH / 2, (screenHeight / 2) - DEFAULT_HEIGHT / 2);
+        setLocation((screenSize.width / 2) - DEFAULT_WIDTH / 2, (screenSize.height / 2) - DEFAULT_HEIGHT / 2);
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setTitle(NAME);
         setResizable(true);
 
-        panel = new Panel();
-        panel.setFocusable(true);
+        final Panel panel = new Panel() {{
+            setFocusable(true);
+            setBackground(Color.LIGHT_GRAY);
+        }};
+
         add(panel);
         JButton buttonDrawPath = new JButton("Draw path");
-        buttonDrawPath.setAlignmentX(CENTER_ALIGNMENT);
         panel.add(buttonDrawPath);
-        panel.setBackground(Color.LIGHT_GRAY);
+
+        JButton buttonDrawEarth = new JButton("Draw earth");
+        panel.add(buttonDrawEarth);
+
+        JButton buttonDrawImage = new JButton("Draw image");
+        panel.add(buttonDrawImage);
+
+        final JCheckBox wheather = new JCheckBox("береговая линия");
+        wheather.setSelected(true);
+        panel.add(wheather);
+
+        JButton buttonDrawCell = new JButton("Draw cell");
+        panel.add(buttonDrawCell);
+
+        JButton buttonClearPolygon = new JButton("Clear Polygon");
+        panel.add(buttonClearPolygon);
+
         panel.addMouseListener(new MouseListener() {
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            public void mouseExited(MouseEvent e) {
-            }
-
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            public void mouseClicked(MouseEvent e) {
-            }
-
+            public void mouseReleased(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseClicked(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == 3) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     Point location = MouseInfo.getPointerInfo().getLocation();
-                    Ax = (int) location.getX() - AreaOfaPolygon.frame.getLocation().x;
-                    Ay = (int) location.getY() - AreaOfaPolygon.frame.getLocation().y;
-                    Panel.paintSquare(getGraphics());
-                    positions[n] = new Position(Ax, Ay);
-                    n++;
+                    polygons.get(0).add(new Position((int) location.getX() - getLocation().x, (int) location.getY() - getLocation().y, wheather.isSelected()));
+                    Panel.drawRect(getGraphics(), polygons.get(0).getTailPosition(), wheather.isSelected() ? Color.BLUE : Color.RED);
                 }
-                //		for(Position e1 : positions)
-                //			System.out.println(e1.getpositionX() + " " + e1.getpoditionY());
             }
         });
+
         buttonDrawPath.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CommonHelper.mergePoints(Frame.this);
+                if (countPolygon == 0)
+                    polygons = CommonHelper.partitionPolygon(polygons);
 
-                positions[n] = positions[0];
-                positions[n + 1] = positions[1];
-                positions[n + 2] = positions[2];
-                for (i = 0; i < n; i++) {
-                    Ax = positions[i].getX();
-                    Ay = positions[i].getY();
-                    Bx = positions[i + 1].getX();
-                    By = positions[i + 1].getY();
-                    Cx = positions[i + 2].getX();
-                    Cy = positions[i + 2].getY();
-                    Dx = positions[i + 3].getX();
-                    Dy = positions[i + 3].getY();
-                   // Panel.paintLine(getGraphics(), Ax, Ay, Bx, By);
-                    Position position1 = DrawHelper.intersection(Ax, Ay, Bx, By, Cx, Cy, DISTANCE_OF_VIEW);
-                    Position position2 = DrawHelper.intersection(Bx, By, Cx, Cy, Dx, Dy, DISTANCE_OF_VIEW);
-                    positions[i] = position1;
-                  //  Panel.paintLine(getGraphics(), position1.getX(), position1.getY(), position2.getX(), position2.getY());
-                    if (i == n - 1) {
-                        positions[n] = positions[0];
-                        positions[n + 1] = positions[1];
-                        positions[n + 2] = positions[2];
+                if (distance == 0)
+                    distance = DISTANCE_OF_VIEW;
+                if (countPolygon == 1)
+                    distance += distance;
+                for (Polygon polygon : polygons) {
+                    centerCheck = true;
+                    for (int j = 0; j < polygon.getN(); j++) {
+                        Position centerPosition = MathFunction.positionOfCenter(polygon);
+                        if (MathFunction.hypotenusePifagor(polygon.getPositions()[j], centerPosition) < distance)
+                            centerCheck = false;
                     }
-                    //                    xk += Ax;
-                    //                    yk += Ay;
-                    //                    count++;
-                }
-                allPositions.add(positions.clone());
-                panel.drawTerrain(getGraphics(), allPositions, n);
-        /*        for (Position[] posArray : allPositions) {
-                    for (Position pos : posArray) {
-                        if (pos != null) {
-                            Panel.drawDot(getGraphics(), pos);
+                    if (centerCheck) {
+                        Color color = Color.WHITE;
+                        if (countPolygon == 0)
+                            color = Color.BLACK;
+                        else if (countPolygon == 1)
+                            color = Color.RED;
+
+                        for (int i = 0; i < polygon.getN(); i++) {
+                            Position a = polygon.getPositions()[i];
+                            Position b = polygon.getPositions()[i+1>polygon.getN()-1 ? 0 : i+1];
+                            if (!a.isWheather() || !b.isWheather())
+                                Panel.drawLine(getGraphics(), a, b, color);
                         }
+
+                        CommonHelper.mergePoints(polygon);
+
+                        Polygon newPositions = new Polygon();
+                        for (int i = 0; i < polygon.getN(); i++) {
+                            newPositions.getPositions()[i] = MathFunction.intersection(getGraphics(), polygon,
+                                                                                  polygon.getPositions()[i-1 < 0 ? polygon.getN()-1 : i-1],
+                                                                                  polygon.getPositions()[i],
+                                                                                  polygon.getPositions()[i+1>polygon.getN()-1 ? 0 : i+1], distance);
+                            newPositions.setN(newPositions.getN() + 1);
+                        }
+                        if (countPolygon % 2 == 0)
+                            Panel.drawLine(getGraphics(), polygon.getTailPosition(), newPositions.getTailPosition(), color);
+                        else
+                            Panel.drawLine(getGraphics(), polygon.getPositions()[0], newPositions.getPositions()[0], color);
+
+
+                        polygon.setPositions(newPositions.getPositions());
                     }
-                }*/
-                //                xk =(xk + Bx)/(count+1);
-                //                yk =(yk + By)/(count+1);
-                //                Ax = xk;
-                //                Ay = yk;
+                }
+                countPolygon++;
             }
         });
+
+        buttonDrawEarth.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        buttonDrawImage.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Panel.paintImage(getGraphics());
+            }
+        });
+
+        buttonClearPolygon.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
+                panel.setBackground(Color.WHITE);
+                panel.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+
+
+        buttonDrawCell.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Panel.drawCell(getGraphics());
+            }
+           });
     }
 }

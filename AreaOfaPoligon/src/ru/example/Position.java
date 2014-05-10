@@ -3,18 +3,17 @@ package ru.example;
 public class Position {
     private int x;
     private int y;
+    private boolean wheather;
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Position(int x, int y, int Bx, int By) {
+    public Position(int x, int y, boolean wheather) {
+        this.wheather = wheather;
         this.x = x;
         this.y = y;
-    }
-
-    public Position() {
     }
 
     @Override
@@ -36,6 +35,14 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public boolean isWheather() {
+        return wheather;
+    }
+
+    public void setWheather(boolean earth) {
+        this.wheather = earth;
     }
 }
 
