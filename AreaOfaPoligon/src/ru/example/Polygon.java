@@ -1,19 +1,26 @@
 package ru.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Многоугольник
+ */
 public class Polygon {
-    public Position[] positions;
+
+    public List<Position> positions;
     public int n;
 
     public Polygon() {
-        this.positions = new Position[100];
+        this.positions = new ArrayList<Position>();
         this.n = 0;
     }
 
-    public Position[] getPositions() {
+    public List<Position> getPositions() {
         return positions;
     }
 
-    public void setPositions(Position[] positions) {
+    public void setPositions(List<Position> positions) {
         this.positions = positions;
     }
 
@@ -26,11 +33,11 @@ public class Polygon {
     }
 
     public void add(Position position) {
-        positions[n] = position;
+        positions.add(position);
         n++;
     }
 
     public Position getTailPosition() {
-        return positions[n-1];
+        return positions.get(positions.size()-1);
     }
 }

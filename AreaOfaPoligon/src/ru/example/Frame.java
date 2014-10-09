@@ -9,31 +9,41 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 class Frame extends JFrame {
-    public static final int DEFAULT_WIDTH = 1000, DEFAULT_HEIGHT = 600;
+
+    /** Ширина окна */
+    public static final int WIDTH = 1000;
+
+    /** Высота окна */
+    public static final int HEIGHT = 600;
+
+    /** Наименование окна */
+    public static final String TITLE = "Polygon";
+
+    /** Радиус надводного радара */
     public static final int DISTANCE_OF_VIEW = 40;
+
+
     public static int distance = 10;
-    public static final String NAME = "Polygon";
     private int countPolygon = 0;
 
     public ArrayList<Polygon> polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
-    public boolean centerCheck = true;
-
 
     public Frame() {
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-
-        setLocation((screenSize.width / 2) - DEFAULT_WIDTH / 2, (screenSize.height / 2) - DEFAULT_HEIGHT / 2);
-        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        setTitle(NAME);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((screenSize.width/2) - WIDTH /2, (screenSize.height/2) - HEIGHT /2);
+        setSize(WIDTH, HEIGHT);
+        setTitle(TITLE);
         setResizable(true);
+        toFront();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
 
         final Panel panel = new Panel() {{
             setFocusable(true);
             setBackground(Color.LIGHT_GRAY);
         }};
-
         add(panel);
+
         JButton buttonDrawPath = new JButton("Draw path");
         panel.add(buttonDrawPath);
 
@@ -59,9 +69,11 @@ class Frame extends JFrame {
             public void mouseEntered(MouseEvent e) {}
             public void mouseClicked(MouseEvent e) {}
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
+                if (e.getButton() == MouseEvent.BUTTON3 && polygons.size() == 1) {
                     Point location = MouseInfo.getPointerInfo().getLocation();
-                    polygons.get(0).add(new Position((int) location.getX() - getLocation().x, (int) location.getY() - getLocation().y, wheather.isSelected()));
+                    polygons.get(0).add(new Position(location.getX() - getLocation().getX(),
+                                                     location.getY() - getLocation().getY(), wheather.isSelected()));
+
                     Panel.drawRect(getGraphics(), polygons.get(0).getTailPosition(), wheather.isSelected() ? Color.BLUE : Color.RED);
                 }
             }
@@ -76,44 +88,23 @@ class Frame extends JFrame {
                     distance = DISTANCE_OF_VIEW;
                 if (countPolygon == 1)
                     distance += distance;
+
                 for (Polygon polygon : polygons) {
-                    centerCheck = true;
-                    for (int j = 0; j < polygon.getN(); j++) {
-                        Position centerPosition = MathFunction.positionOfCenter(polygon);
-                        if (MathFunction.hypotenusePifagor(polygon.getPositions()[j], centerPosition) < distance)
-                            centerCheck = false;
-                    }
-                    if (centerCheck) {
-                        Color color = Color.WHITE;
-                        if (countPolygon == 0)
-                            color = Color.BLACK;
-                        else if (countPolygon == 1)
-                            color = Color.RED;
+                    Color color = Color.WHITE;
+                    if (countPolygon == 0)
+                        color = Color.BLACK;
+                    else if (countPolygon == 1)
+                        color = Color.RED;
 
+                    if (CommonHelper.isHavePositionCloseToCenter(polygon, distance)) {
                         for (int i = 0; i < polygon.getN(); i++) {
-                            Position a = polygon.getPositions()[i];
-                            Position b = polygon.getPositions()[i+1>polygon.getN()-1 ? 0 : i+1];
+                            Position a = polygon.getPositions().get(i);
+                            Position b = polygon.getPositions().get(i + 1 > polygon.getN() - 1 ? 0 : i + 1);
                             if (!a.isWheather() || !b.isWheather())
-                                Panel.drawLine(getGraphics(), a, b, color);
+                                Panel.drawLine(AreaOfaPolygon.frame.getGraphics(), a, b, color);
                         }
 
-                        CommonHelper.mergePoints(polygon);
-
-                        Polygon newPositions = new Polygon();
-                        for (int i = 0; i < polygon.getN(); i++) {
-                            newPositions.getPositions()[i] = MathFunction.intersection(getGraphics(), polygon,
-                                                                                  polygon.getPositions()[i-1 < 0 ? polygon.getN()-1 : i-1],
-                                                                                  polygon.getPositions()[i],
-                                                                                  polygon.getPositions()[i+1>polygon.getN()-1 ? 0 : i+1], distance);
-                            newPositions.setN(newPositions.getN() + 1);
-                        }
-                        if (countPolygon % 2 == 0)
-                            Panel.drawLine(getGraphics(), polygon.getTailPosition(), newPositions.getTailPosition(), color);
-                        else
-                            Panel.drawLine(getGraphics(), polygon.getPositions()[0], newPositions.getPositions()[0], color);
-
-
-                        polygon.setPositions(newPositions.getPositions());
+                        CommonHelper.calculatePositions(distance, polygon);
                     }
                 }
                 countPolygon++;
@@ -135,16 +126,14 @@ class Frame extends JFrame {
         buttonClearPolygon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
-                panel.setBackground(Color.WHITE);
                 panel.setBackground(Color.LIGHT_GRAY);
             }
         });
-
 
         buttonDrawCell.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Panel.drawCell(getGraphics());
             }
-           });
+        });
     }
 }

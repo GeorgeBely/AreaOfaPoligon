@@ -11,8 +11,8 @@ public class MathFunction {
     public static Position positionOfCenter(Polygon polygon) {
         int sumX = 0, sumY = 0;
         for (int j = 0; j < polygon.getN(); j++) {
-            sumX += polygon.getPositions()[j].getX();
-            sumY += polygon.getPositions()[j].getY();
+            sumX += polygon.getPositions().get(j).getX();
+            sumY += polygon.getPositions().get(j).getY();
         }
         return new Position(sumX / polygon.getN(), sumY / polygon.getN());
     }
@@ -28,7 +28,7 @@ public class MathFunction {
         if (b.getX() == a.getX())
             return CenterPosition.down;
 
-        int y = ((centerPosition.getX() - a.getX()) * (b.getY() - a.getY())) / (b.getX() - a.getX()) + a.getY();
+        double y = ((centerPosition.getX() - a.getX()) * (b.getY() - a.getY())) / (b.getX() - a.getX()) + a.getY();
         return y >= centerPosition.getY() ? CenterPosition.down : CenterPosition.up;
     }
 

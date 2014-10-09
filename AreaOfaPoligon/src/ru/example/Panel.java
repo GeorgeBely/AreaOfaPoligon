@@ -22,17 +22,17 @@ class Panel extends JPanel {
 
     public static void drawRect(Graphics g, Position point) {
         g.setColor(Color.RED);
-        g.fillOval(point.getX(), point.getY(), 10, 10);
+        g.fillOval((int) point.getX(), (int) point.getY(), 10, 10);
     }
 
     public static void drawRect(Graphics g, Position point, Color c){
         g.setColor(c);
-        g.fillOval(point.getX(), point.getY(), 10, 10);
+        g.fillOval((int) point.getX(), (int) point.getY(), 10, 10);
     }
 
     public static void drawLine(Graphics g, Position a, Position b, Color color) {
         g.setColor(color);
-        g.drawLine(a.getX(), a.getY(), b.getX(), b.getY());
+        g.drawLine((int) a.getX(), (int) a.getY(), (int) b.getX(), (int) b.getY());
     }
 
     public static void paintImage(Graphics g) {

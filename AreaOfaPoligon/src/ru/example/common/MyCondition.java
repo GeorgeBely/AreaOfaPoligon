@@ -10,8 +10,8 @@ import ru.example.Position;
  * To change this template use File | Settings | File Templates.
  */
 public class MyCondition {
-    private final int startX;
-    private final int endX;
+    private final double startX;
+    private final double endX;
     private double b;
     private double k;
     TypeCondition typeCondition;
@@ -45,7 +45,7 @@ public class MyCondition {
 
     }
 
-    private double calculate(int x) {
+    private double calculate(double x) {
         return k * x + b;
     }
 

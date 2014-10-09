@@ -1,21 +1,16 @@
 package ru.example;
 
-import java.awt.*;
-import javax.swing.*;
 
+/**
+ * Основной класс приложения
+ */
 public class AreaOfaPolygon {
+
+    /** Основной фрейм приложения */
     public static Frame frame;
-    public static void main(String[] args)
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                frame = new Frame();
-                frame.toFront();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
+
+
+    public static void main(String[] args) {
+        frame = new Frame();
     }
 }
