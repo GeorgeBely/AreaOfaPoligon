@@ -1,13 +1,13 @@
-package ru.example;
+package ru.areaOfPolygon.location;
 
 public enum CenterPosition {
     /**
      * Центр многоугольника выше
      */
-    up,
+    UP,
 
     /**
      * Центр многоугольника ниже
      */
-    down
+    DOWN
 }

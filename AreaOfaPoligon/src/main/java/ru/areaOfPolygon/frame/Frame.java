@@ -1,4 +1,11 @@
-package ru.example;
+package ru.areaOfPolygon.frame;
+
+import ru.areaOfPolygon.AreaOfaPolygon;
+import ru.areaOfPolygon.location.*;
+import ru.areaOfPolygon.graphics.Panel;
+import ru.areaOfPolygon.location.Polygon;
+import ru.areaOfPolygon.services.ImagesService;
+import ru.areaOfPolygon.services.PolygonService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,8 +14,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
-class Frame extends JFrame {
+
+public class Frame extends JFrame {
 
     /** Ширина окна */
     public static final int WIDTH = 1000;
@@ -20,17 +29,18 @@ class Frame extends JFrame {
     public static final String TITLE = "Polygon";
 
     /** Радиус надводного радара */
-    public static final int DISTANCE_OF_VIEW = 40;
+    public static final int DEFAULT_DISTANCE_OF_VIEW = 40;
 
 
-    public static int distance = 10;
-    private int countPolygon = 0;
-
+    /** Список многоугольников */
     public ArrayList<Polygon> polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
+
+    private static Integer distance;
+
 
     public Frame() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((screenSize.width/2) - WIDTH /2, (screenSize.height/2) - HEIGHT /2);
+        setLocation(screenSize.width/2 - WIDTH/2, screenSize.height/2 - HEIGHT/2);
         setSize(WIDTH, HEIGHT);
         setTitle(TITLE);
         setResizable(true);
@@ -46,9 +56,6 @@ class Frame extends JFrame {
 
         JButton buttonDrawPath = new JButton("Draw path");
         panel.add(buttonDrawPath);
-
-        JButton buttonDrawEarth = new JButton("Draw earth");
-        panel.add(buttonDrawEarth);
 
         JButton buttonDrawImage = new JButton("Draw image");
         panel.add(buttonDrawImage);
@@ -71,55 +78,54 @@ class Frame extends JFrame {
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3 && polygons.size() == 1) {
                     Point location = MouseInfo.getPointerInfo().getLocation();
-                    polygons.get(0).add(new Position(location.getX() - getLocation().getX(),
-                                                     location.getY() - getLocation().getY(), wheather.isSelected()));
+                    PositionType positionType = wheather.isSelected() ? PositionType.WATER : PositionType.COAST;
+                    Position newPosition = new Position(location.getX() - getLocation().getX(),
+                                                        location.getY() - getLocation().getY(), positionType);
+                    polygons.get(0).add(newPosition);
 
-                    Panel.drawRect(getGraphics(), polygons.get(0).getTailPosition(), wheather.isSelected() ? Color.BLUE : Color.RED);
+                    Panel.drawPosition(getGraphics(), newPosition);
                 }
             }
         });
 
         buttonDrawPath.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (countPolygon == 0)
-                    polygons = CommonHelper.partitionPolygon(polygons);
+                polygons = PolygonService.partitionPolygon(polygons);
 
-                if (distance == 0)
-                    distance = DISTANCE_OF_VIEW;
-                if (countPolygon == 1)
-                    distance += distance;
-
+                List<Path> paths = new ArrayList<Path>();
                 for (Polygon polygon : polygons) {
-                    Color color = Color.WHITE;
-                    if (countPolygon == 0)
-                        color = Color.BLACK;
-                    else if (countPolygon == 1)
-                        color = Color.RED;
+                    Path path = new Path();
+                    distance = null;
+                    int countPolygon = 0;
+                    while (!PolygonService.isHavePositionCloseToCenter(polygon, distance)) {
+                        if (distance == null)
+                            distance = DEFAULT_DISTANCE_OF_VIEW;
+                        else if (distance == DEFAULT_DISTANCE_OF_VIEW)
+                            distance += distance;
 
-                    if (CommonHelper.isHavePositionCloseToCenter(polygon, distance)) {
-                        for (int i = 0; i < polygon.getN(); i++) {
-                            Position a = polygon.getPositions().get(i);
-                            Position b = polygon.getPositions().get(i + 1 > polygon.getN() - 1 ? 0 : i + 1);
-                            if (!a.isWheather() || !b.isWheather())
-                                Panel.drawLine(AreaOfaPolygon.frame.getGraphics(), a, b, color);
+                        List<Position> newPositions = PolygonService.calculatePositions(distance, polygon);
+                        for (Position position : newPositions) {
+                            position.setCountLine(countPolygon);
+                            path.add(position);
                         }
+                        polygon.setPositions(newPositions);
 
-                        CommonHelper.calculatePositions(distance, polygon);
+                        countPolygon++;
                     }
+                    paths.add(path);
                 }
-                countPolygon++;
-            }
-        });
 
-        buttonDrawEarth.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
+                Path allPath = new Path();
+                for (Path path : paths) {
+                    allPath.addAll(path.getElements());
+                }
+                Panel.drawPath(getGraphics(), allPath);
             }
         });
 
         buttonDrawImage.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Panel.paintImage(getGraphics());
+                Panel.drawImage(getGraphics(), new Position(1, 1), ImagesService.getImage("beach.png"));
             }
         });
 
@@ -132,7 +138,7 @@ class Frame extends JFrame {
 
         buttonDrawCell.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Panel.drawCell(getGraphics());
+                Panel.drawCell(AreaOfaPolygon.frame);
             }
         });
     }

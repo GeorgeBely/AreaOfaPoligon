@@ -1,6 +1,6 @@
 package ru.example.common;
 
-import ru.example.Position;
+import ru.areaOfPolygon.location.Position;
 
 /**
  * Created with IntelliJ IDEA.

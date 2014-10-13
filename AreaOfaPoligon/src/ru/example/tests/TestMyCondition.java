@@ -1,6 +1,6 @@
 package ru.example.tests;
 
-import ru.example.Position;
+import ru.areaOfPolygon.location.Position;
 import ru.example.common.MyCondition;
 
 public class TestMyCondition {

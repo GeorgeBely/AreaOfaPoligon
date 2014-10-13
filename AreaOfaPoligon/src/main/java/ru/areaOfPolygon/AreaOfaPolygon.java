@@ -1,4 +1,6 @@
-package ru.example;
+package ru.areaOfPolygon;
+
+import ru.areaOfPolygon.frame.Frame;
 
 
 /**
