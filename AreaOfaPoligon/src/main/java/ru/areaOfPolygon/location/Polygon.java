@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс описывающий многоугольник.
+ * РљР»Р°СЃСЃ РѕРїРёСЃС‹РІР°СЋС‰РёР№ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРє.
  */
 public class Polygon {
 
-    /** Список точек многоугольника */
+    /** РЎРїРёСЃРѕРє С‚РѕС‡РµРє РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєР° */
     public List<Position> positions;
 
 
@@ -26,16 +26,16 @@ public class Polygon {
     }
 
     /**
-     * Добавляет точку к многоугольнику.
+     * Р”РѕР±Р°РІР»СЏРµС‚ С‚РѕС‡РєСѓ Рє РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєСѓ.
      *
-     * @param position точка.
+     * @param position С‚РѕС‡РєР°.
      */
     public void add(Position position) {
         positions.add(position);
     }
 
     /**
-     * @return количество точек в многоугольнике.
+     * @return РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕС‡РµРє РІ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєРµ.
      */
     public int size() {
         if (positions == null)
@@ -44,10 +44,10 @@ public class Polygon {
     }
 
     /**
-     * Возвращает точку по индексу.
+     * Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РѕС‡РєСѓ РїРѕ РёРЅРґРµРєСЃСѓ.
      *
-     * @param index индекс
-     * @return позицию точки.
+     * @param index РёРЅРґРµРєСЃ
+     * @return РїРѕР·РёС†РёСЋ С‚РѕС‡РєРё.
      */
     public Position get(int index) {
         int i = index/size();
@@ -59,7 +59,7 @@ public class Polygon {
     }
 
     /**
-     * @return последнюю точку многоугольника, или <code>null</code>, если точек нет.
+     * @return РїРѕСЃР»РµРґРЅСЋСЋ С‚РѕС‡РєСѓ РјРЅРѕРіРѕСѓРіРѕР»СЊРЅРёРєР°, РёР»Рё <code>null</code>, РµСЃР»Рё С‚РѕС‡РµРє РЅРµС‚.
      */
     public Position getTailPosition() {
         if (size() == 0)

@@ -5,16 +5,16 @@ import ru.areaOfPolygon.services.MathService;
 
 public class Position {
 
-    /** Позиция по абсцисе */
+    /** РџРѕР·РёС†РёСЏ РїРѕ Р°Р±СЃС†РёСЃРµ */
     private double x;
 
-    /** Позиция по ординате */
+    /** РџРѕР·РёС†РёСЏ РїРѕ РѕСЂРґРёРЅР°С‚Рµ */
     private double y;
 
-    /** Тип позиции */
+    /** РўРёРї РїРѕР·РёС†РёРё */
     private PositionType positionType;
 
-    /** Значение итерации в пути */
+    /** Р—РЅР°С‡РµРЅРёРµ РёС‚РµСЂР°С†РёРё РІ РїСѓС‚Рё */
     private int countLine;
 
 
@@ -62,24 +62,24 @@ public class Position {
     }
 
     /**
-     * @return {true}, если позиция является примыкающей к акватории.
+     * @return {true}, РµСЃР»Рё РїРѕР·РёС†РёСЏ СЏРІР»СЏРµС‚СЃСЏ РїСЂРёРјС‹РєР°СЋС‰РµР№ Рє Р°РєРІР°С‚РѕСЂРёРё.
      */
     public boolean isWheather() {
         return PositionType.WATER.equals(positionType);
     }
 
     /**
-     * Рассчитывает дистанцию до точки.
+     * Р Р°СЃСЃС‡РёС‚С‹РІР°РµС‚ РґРёСЃС‚Р°РЅС†РёСЋ РґРѕ С‚РѕС‡РєРё.
      *
-     * @param position точка до которой рассчитать дистанцию.
-     * @return расстояние до точки.
+     * @param position С‚РѕС‡РєР° РґРѕ РєРѕС‚РѕСЂРѕР№ СЂР°СЃСЃС‡РёС‚Р°С‚СЊ РґРёСЃС‚Р°РЅС†РёСЋ.
+     * @return СЂР°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ С‚РѕС‡РєРё.
      */
     public double getDistanceTo(Position position) {
         return MathService.hypot(this, position);
     }
 
     /**
-     * @return {true}, если позиция одна и таже.
+     * @return {true}, РµСЃР»Рё РїРѕР·РёС†РёСЏ РѕРґРЅР° Рё С‚Р°Р¶Рµ.
      */
     public boolean equals(Position position) {
         return x == position.getX() && y == position.getY();

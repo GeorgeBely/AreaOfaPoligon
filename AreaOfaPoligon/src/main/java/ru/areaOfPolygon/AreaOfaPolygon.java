@@ -4,11 +4,11 @@ import ru.areaOfPolygon.frame.Frame;
 
 
 /**
- * Основной класс приложения
+ * РћСЃРЅРѕРІРЅРѕР№ РєР»Р°СЃСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
  */
 public class AreaOfaPolygon {
 
-    /** Основной фрейм приложения */
+    /** РћСЃРЅРѕРІРЅРѕР№ С„СЂРµР№Рј РїСЂРёР»РѕР¶РµРЅРёСЏ */
     public static Frame frame;
 
 
