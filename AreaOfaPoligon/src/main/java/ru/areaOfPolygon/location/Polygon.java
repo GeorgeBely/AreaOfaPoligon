@@ -10,7 +10,7 @@ import java.util.List;
 public class Polygon {
 
     /** Список точек многоугольника */
-    public List<Position> positions;
+    private List<Position> positions;
 
 
     public Polygon() {

@@ -29,7 +29,7 @@ public class Frame extends JFrame {
     public static final String TITLE = "Polygon";
 
     /** Радиус надводного радара */
-    public static final int DEFAULT_DISTANCE_OF_VIEW = 40;
+    public static final int DEFAULT_DISTANCE_OF_VIEW = 5;
 
 
     /** Список многоугольников */
@@ -80,7 +80,7 @@ public class Frame extends JFrame {
                     Point location = MouseInfo.getPointerInfo().getLocation();
                     PositionType positionType = wheather.isSelected() ? PositionType.WATER : PositionType.COAST;
                     Position newPosition = new Position(location.getX() - getLocation().getX(),
-                                                        location.getY() - getLocation().getY(), positionType);
+                                                        location.getY() - getLocation().getY(), positionType, 0);
                     polygons.get(0).add(newPosition);
 
                     Panel.drawPosition(getGraphics(), newPosition);
@@ -97,11 +97,14 @@ public class Frame extends JFrame {
                     Path path = new Path();
                     distance = null;
                     int countPolygon = 0;
+                    Panel.drawPolygon(getGraphics(), polygon);
                     while (!PolygonService.isHavePositionCloseToCenter(polygon, distance)) {
                         if (distance == null)
                             distance = DEFAULT_DISTANCE_OF_VIEW;
                         else if (distance == DEFAULT_DISTANCE_OF_VIEW)
                             distance += distance;
+
+                        countPolygon++;
 
                         List<Position> newPositions = PolygonService.calculatePositions(distance, polygon);
                         for (Position position : newPositions) {
@@ -110,7 +113,6 @@ public class Frame extends JFrame {
                         }
                         polygon.setPositions(newPositions);
 
-                        countPolygon++;
                     }
                     paths.add(path);
                 }

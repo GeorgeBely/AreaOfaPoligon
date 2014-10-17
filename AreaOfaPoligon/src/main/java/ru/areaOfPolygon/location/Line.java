@@ -46,4 +46,16 @@ public class Line {
     public double length() {
         return MathService.hypot(a, b);
     }
+
+    /**
+     * @return {true}, если линия одна и таже.
+     */
+    public boolean equals(Line line) {
+        if (line.getA().equals(a)) {
+            return line.getB().equals(b);
+        } else if (line.getA().equals(b)) {
+            return line.getB().equals(a);
+        }
+        return false;
+    }
 }

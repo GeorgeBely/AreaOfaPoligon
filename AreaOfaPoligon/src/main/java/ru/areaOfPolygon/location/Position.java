@@ -3,7 +3,7 @@ package ru.areaOfPolygon.location;
 
 import ru.areaOfPolygon.services.MathService;
 
-public class Position {
+public class Position implements Comparable<Position> {
 
     /** Позиция по абсцисе */
     private double x;
@@ -27,6 +27,13 @@ public class Position {
         this.positionType = positionType;
         this.x = x;
         this.y = y;
+    }
+
+    public Position(double x, double y, PositionType positionType, int countLine) {
+        this.positionType = positionType;
+        this.x = x;
+        this.y = y;
+        this.countLine = countLine;
     }
 
     public double getX() {
@@ -88,6 +95,11 @@ public class Position {
     @Override
     public String toString() {
         return "x: " + x + " y: " + y;
+    }
+
+    @Override
+    public int compareTo(Position position) {
+        return 1;
     }
 }
 

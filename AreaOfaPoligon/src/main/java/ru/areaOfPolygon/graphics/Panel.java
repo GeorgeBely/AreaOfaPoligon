@@ -3,6 +3,7 @@ package ru.areaOfPolygon.graphics;
 import ru.areaOfPolygon.location.Line;
 import ru.areaOfPolygon.location.Path;
 import ru.areaOfPolygon.location.Position;
+import ru.areaOfPolygon.location.Polygon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,12 +54,26 @@ public class Panel extends JPanel {
         Position lastPosition = path.lastElement();
         for (Position position : path.getElements()) {
             Color color = Color.WHITE;
-            if (position.getCountLine() == 0)
-                color = Color.BLACK;
-            else if (position.getCountLine() == 1)
+            if (position.getCountLine() == 1)
                 color = Color.RED;
 
             drawLine(g, new Line(position, lastPosition), color);
+            lastPosition = position;
+        }
+    }
+
+    /**
+     * Рисует многоугольник
+     *
+     * @param g    объект графической панели.
+     * @param polygon многоугольник.
+     */
+    public static void drawPolygon(Graphics g, Polygon polygon) {
+        Color color = Color.BLACK;
+        Position lastPosition = polygon.getPositions().get(polygon.size()-1);
+        for (Position position : polygon.getPositions()) {
+            drawLine(g, new Line(position, lastPosition), color);
+            lastPosition = position;
         }
     }
 

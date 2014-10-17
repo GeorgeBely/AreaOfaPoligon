@@ -50,7 +50,8 @@ public class MathService {
         CenterPosition centerPosition = locationCenter(firstLine, positionOfCenter(polygon));
         Line lineA = firstLine;
         if (!firstLine.isWheather() || firstLine.length() < distanceOfView * 2)
-            lineA = parallelLine(firstLine, centerPosition, distanceOfView);
+            if (!(firstLine.getA().getCountLine() == 1 && new Line(polygon.get(0), polygon.getTailPosition()).equals(firstLine)))
+                lineA = parallelLine(firstLine, centerPosition, distanceOfView);
 
         centerPosition = locationCenter(secondLine, positionOfCenter(polygon));
         Line lineB = secondLine;
@@ -81,17 +82,17 @@ public class MathService {
         if (CenterPosition.DOWN.equals(centerPosition))
             distanceY = (-1) * distanceY;
 
-        if (CenterPosition.UP.equals(centerPosition))
+//        if (CenterPosition.UP.equals(centerPosition))
+//            distanceX = (-1) * distanceX;
+
+        if (a.getY() < b.getY())
             distanceX = (-1) * distanceX;
 
-        if (a.getY() > b.getY())
+        if (a.getX() < b.getX())
             distanceX = (-1) * distanceX;
 
-        if (a.getX() > b.getX())
-            distanceX = (-1) * distanceX;
-
-        Position newA = new Position(a.getX() - distanceX, a.getY() + distanceY);
-        Position newB = new Position(b.getX() - distanceX, b.getY() + distanceY);
+        Position newA = new Position(a.getX() - distanceX, a.getY() + distanceY, a.getPositionType());
+        Position newB = new Position(b.getX() - distanceX, b.getY() + distanceY, b.getPositionType());
 
 //        Graphics g = AreaOfaPolygon.frame.getGraphics();
 //        Panel.drawPosition(g, newA, Color.BLACK);
@@ -105,10 +106,10 @@ public class MathService {
      * @return точку пересечения.
      */
     public static Position intersectionLines(Line A, Line B) {
-        double k = A.getB().getY() - A.getA().getY() / A.getB().getX() - A.getA().getX();
+        double k = (A.getB().getY() - A.getA().getY()) / (A.getB().getX() - A.getA().getX());
         double b2 = A.getA().getY() - k * A.getA().getX();
 
-        double g = B.getB().getY() - B.getA().getY() / B.getB().getX() - B.getA().getX();
+        double g = (B.getB().getY() - B.getA().getY()) / (B.getB().getX() - B.getA().getX());
         double a2 = B.getA().getY() - g * B.getA().getX();
 
         double x = (a2 - b2) / (k - g);
