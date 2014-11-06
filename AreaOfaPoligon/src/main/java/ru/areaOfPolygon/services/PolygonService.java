@@ -45,7 +45,9 @@ public class PolygonService {
 
         for (Position position : polygon.getPositions()) {
             Position centerPosition = MathService.positionOfCenter(polygon);
-            if (position.getDistanceTo(centerPosition) < distance)
+//            if (position.getDistanceTo(centerPosition) < distance)
+            if (Math.abs(position.getX() - centerPosition.getX()) < distance*4 &&
+                Math.abs(position.getY() - centerPosition.getY()) < distance*4)
                 return true;
         }
         return false;

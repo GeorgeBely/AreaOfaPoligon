@@ -54,7 +54,7 @@ public class Panel extends JPanel {
         Position lastPosition = path.lastElement();
         for (Position position : path.getElements()) {
             Color color = Color.WHITE;
-            if (position.getCountLine() == 1)
+            if (lastPosition.getCountLine() == 1)
                 color = Color.RED;
 
             drawLine(g, new Line(position, lastPosition), color);

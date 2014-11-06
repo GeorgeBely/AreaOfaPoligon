@@ -98,7 +98,7 @@ public class Frame extends JFrame {
                     distance = null;
                     int countPolygon = 0;
                     Panel.drawPolygon(getGraphics(), polygon);
-                    while (!PolygonService.isHavePositionCloseToCenter(polygon, distance)) {
+                    while (!PolygonService.isHavePositionCloseToCenter(polygon, distance) && countPolygon < 10) {
                         if (distance == null)
                             distance = DEFAULT_DISTANCE_OF_VIEW;
                         else if (distance == DEFAULT_DISTANCE_OF_VIEW)
@@ -134,7 +134,7 @@ public class Frame extends JFrame {
         buttonClearPolygon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
-                panel.setBackground(Color.LIGHT_GRAY);
+                setBackground(Color.LIGHT_GRAY);
             }
         });
 

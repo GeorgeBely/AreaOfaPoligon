@@ -82,8 +82,8 @@ public class MathService {
         if (CenterPosition.DOWN.equals(centerPosition))
             distanceY = (-1) * distanceY;
 
-//        if (CenterPosition.UP.equals(centerPosition))
-//            distanceX = (-1) * distanceX;
+        if (CenterPosition.UP.equals(centerPosition))
+            distanceX = (-1) * distanceX;
 
         if (a.getY() < b.getY())
             distanceX = (-1) * distanceX;
@@ -91,12 +91,8 @@ public class MathService {
         if (a.getX() < b.getX())
             distanceX = (-1) * distanceX;
 
-        Position newA = new Position(a.getX() - distanceX, a.getY() + distanceY, a.getPositionType());
-        Position newB = new Position(b.getX() - distanceX, b.getY() + distanceY, b.getPositionType());
-
-//        Graphics g = AreaOfaPolygon.frame.getGraphics();
-//        Panel.drawPosition(g, newA, Color.BLACK);
-//        Panel.drawPosition(g, newB, Color.BLACK);
+        Position newA = new Position(a.getX() + distanceX, a.getY() + distanceY, a.getPositionType());
+        Position newB = new Position(b.getX() + distanceX, b.getY() + distanceY, b.getPositionType());
 
         return new Line(newA, newB);
     }
