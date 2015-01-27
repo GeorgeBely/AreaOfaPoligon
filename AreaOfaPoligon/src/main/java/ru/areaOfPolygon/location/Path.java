@@ -23,7 +23,7 @@ public class Path {
      */
     public void add(Position position) {
         if (elements == null)
-            elements = new TreeSet<Position>();
+            elements = new TreeSet<>();
 
         elements.add(position);
     }
@@ -35,7 +35,7 @@ public class Path {
      */
     public void addAll(Collection<Position> positions) {
         if (elements == null)
-            elements = new TreeSet<Position>();
+            elements = new TreeSet<>();
 
         elements.addAll(positions);
     }

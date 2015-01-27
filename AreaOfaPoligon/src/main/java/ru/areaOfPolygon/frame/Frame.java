@@ -58,6 +58,7 @@ public class Frame extends JFrame {
         panel.add(buttonDrawPath);
 
         JButton buttonDrawImage = new JButton("Draw image");
+        buttonDrawImage.addActionListener(e -> Panel.drawImage(getGraphics(), new Position(1, 1), ImagesService.getImage("beach.png")));
         panel.add(buttonDrawImage);
 
         final JCheckBox wheather = new JCheckBox("береговая линия");
@@ -65,9 +66,14 @@ public class Frame extends JFrame {
         panel.add(wheather);
 
         JButton buttonDrawCell = new JButton("Draw cell");
+        buttonDrawCell.addActionListener(e -> Panel.drawCell(AreaOfaPolygon.frame));
         panel.add(buttonDrawCell);
 
         JButton buttonClearPolygon = new JButton("Clear Polygon");
+        buttonClearPolygon.addActionListener(e -> {
+            polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
+            setBackground(Color.LIGHT_GRAY);
+        });
         panel.add(buttonClearPolygon);
 
         panel.addMouseListener(new MouseListener() {
@@ -92,7 +98,7 @@ public class Frame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 polygons = PolygonService.partitionPolygon(polygons);
 
-                List<Path> paths = new ArrayList<Path>();
+                List<Path> paths = new ArrayList<>();
                 for (Polygon polygon : polygons) {
                     Path path = new Path();
                     distance = null;
@@ -122,25 +128,6 @@ public class Frame extends JFrame {
                     allPath.addAll(path.getElements());
                 }
                 Panel.drawPath(getGraphics(), allPath);
-            }
-        });
-
-        buttonDrawImage.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Panel.drawImage(getGraphics(), new Position(1, 1), ImagesService.getImage("beach.png"));
-            }
-        });
-
-        buttonClearPolygon.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                polygons = new ArrayList<Polygon>(){{ add(new Polygon()); }};
-                setBackground(Color.LIGHT_GRAY);
-            }
-        });
-
-        buttonDrawCell.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Panel.drawCell(AreaOfaPolygon.frame);
             }
         });
     }

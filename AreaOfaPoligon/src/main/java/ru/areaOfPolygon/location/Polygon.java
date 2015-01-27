@@ -14,7 +14,7 @@ public class Polygon {
 
 
     public Polygon() {
-        this.positions = new ArrayList<Position>();
+        this.positions = new ArrayList<>();
     }
 
     public List<Position> getPositions() {
@@ -38,9 +38,7 @@ public class Polygon {
      * @return количество точек в многоугольнике.
      */
     public int size() {
-        if (positions == null)
-            return 0;
-        return positions.size();
+        return positions == null ? 0 : positions.size();
     }
 
     /**
@@ -62,8 +60,6 @@ public class Polygon {
      * @return последнюю точку многоугольника, или <code>null</code>, если точек нет.
      */
     public Position getTailPosition() {
-        if (size() == 0)
-            return null;
-        return positions.get(size() - 1);
+        return size() == 0 ? null : positions.get(size() - 1);
     }
 }
